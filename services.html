@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenGe Web Studio | Premium Services</title>
+    <style>
+        /* ========================================
+        CSS VARIABLES & RESET
+        ========================================
+        */
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.2);
+            --secondary: #0f172a; /* Slate 900 */
+            --accent: #f43f5e; /* Rose */
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+        HEADER SECTION
+        ========================================
+        */
+        .services-section {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            background: var(--primary-glow);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .header-content h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .header-content p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+
+        /* ========================================
+        CONTROLS (Search & Filter)
+        ========================================
+        */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        #serviceSearch {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 100px;
+            border: 2px solid #e2e8f0;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        #serviceSearch:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 10px 22px;
+            border: none;
+            background: white;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
+        /* ========================================
+        SERVICES GRID
+        ========================================
+        */
+        #servicesGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            transition: var(--transition);
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-glow);
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, var(--primary-glow), transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 35px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            transform: rotate(45deg);
+            text-transform: uppercase;
+        }
+
+        /* ========================================
+        CTA BUTTONS
+        ========================================
+        */
+        .card-cta {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 1;
+            text-decoration: none;
+        }
+
+        .service-card:hover .card-cta {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-cta-container {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .btn-premium {
+            background: var(--primary);
+            color: white;
+            padding: 20px 45px;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px var(--primary-glow);
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px var(--primary-glow);
+            background: #4f46e5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content h2 { font-size: 2rem; }
+            .services-section { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<section class="services-section">
+    <div class="header-content">
+        <span class="section-tag">Our Expertise</span>
+        <h2>High-End Web Solutions</h2>
+        <p>At ZenGe Web Studio, we blend aesthetic precision with technical excellence to scale your digital presence.</p>
+    </div>
+
+    <div class="controls-container">
+        <div class="search-wrapper">
+            <input type="text" id="serviceSearch" placeholder="Search for a service (e.g. 'E-commerce')...">
+        </div>
+
+        <div class="filter-group" id="filterContainer">
+            <button class="filter-btn active" data-filter="all">All Solutions</button>
+            <button class="filter-btn" data-filter="business">Business</button>
+            <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
+            <button class="filter-btn" data-filter="personal">Personal</button>
+            <button class="filter-btn" data-filter="tech">Technical</button>
+        </div>
+    </div>
+
+    <div id="servicesGrid"></div>
+
+    <div class="main-cta-container">
+        <a href="https://wa.me/yournumber" class="btn-premium">Book Your Website Now</a>
+    </div>
+</section>
+
+<script>
+    /* ========================================
+    DATA STRUCTURE (Services Array)
+    ========================================
+    */
+    const services = [
+        {
+            title: "Business Website",
+            icon: "🏢",
+            desc: "Professional corporate presence designed to build trust and authority.",
+            category: "business",
+            tag: "Popular"
+        },
+        {
+            title: "E-commerce Store",
+            icon: "🛍️",
+            desc: "Full-featured online shops with seamless payments and inventory management.",
+            category: "ecommerce",
+            tag: "Best Choice"
+        },
+        {
+            title: "Portfolio Website",
+            icon: "🎨",
+            desc: "A creative digital gallery to showcase your best work and attract clients.",
+            category: "personal"
+        },
+        {
+            title: "Landing Page",
+            icon: "🚀",
+            desc: "High-converting single pages designed to turn visitors into customers.",
+            category: "business",
+            tag: "High ROI"
+        },
+        {
+            title: "Blog Website",
+            icon: "✍️",
+            desc: "Elegant platforms for storytellers and thought leaders to share insights.",
+            category: "personal"
+        },
+        {
+            title: "Restaurant Website",
+            icon: "🍽️",
+            desc: "Integrated menus, online ordering, and reservation systems for food brands.",
+            category: "business"
+        },
+        {
+            title: "School/College Web",
+            icon: "🎓",
+            desc: "Educational portals with student resources and institutional info.",
+            category: "business"
+        },
+        {
+            title: "Personal Brand",
+            icon: "⭐",
+            desc: "Custom websites built around your unique identity and influence.",
+            category: "personal"
+        },
+        {
+            title: "Startup Website",
+            icon: "💡",
+            desc: "Agile, scalable websites designed for fast-growing new ventures.",
+            category: "tech",
+            tag: "Modern"
+        },
+        {
+            title: "Website Redesign",
+            icon: "🔄",
+            desc: "Transform your outdated site into a modern, high-performance machine.",
+            category: "tech"
+        },
+        {
+            title: "Custom Web App",
+            icon: "⚙️",
+            desc: "Tailor-made software solutions built specifically for your workflow.",
+            category: "tech"
+        },
+        {
+            title: "Maintenance & Support",
+            icon: "🛠️",
+            desc: "Peace of mind with 24/7 security updates and performance optimization.",
+            category: "tech"
+        }
+    ];
+
+    const grid = document.getElementById('servicesGrid');
+    const searchInput = document.getElementById('serviceSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    /* ========================================
+    CORE LOGIC: DYNAMIC RENDERING
+    ========================================
+    */
+    function renderServices(data) {
+        // Clear existing grid
+        grid.innerHTML = '';
+
+        // Iterate through the array to build HTML
+        data.forEach((service, index) => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            // Staggered animation delay
+            card.style.animationDelay = `${index * 0.05}s`;
+
+            card.innerHTML = `
+                ${service.tag ? `<span class="card-tag">${service.tag}</span>` : ''}
+                <span class="card-icon">${service.icon}</span>
+                <h3 class="card-title">${service.title}</h3>
+                <p class="card-desc">${service.desc}</p>
+                <a href="#" class="card-cta">View Details</a>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    /* ========================================
+    SEARCH & FILTER LOGIC
+    ========================================
+    */
+    function filterAndSearch() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+
+        const filtered = services.filter(s => {
+            const matchesSearch = s.title.toLowerCase().includes(searchTerm) || 
+                                 s.desc.toLowerCase().includes(searchTerm);
+            const matchesFilter = activeFilter === 'all' || s.category === activeFilter;
+            
+            return matchesSearch && matchesFilter;
+        });
+
+        renderServices(filtered);
+    }
+
+    // Event: Search Input
+    searchInput.addEventListener('input', filterAndSearch);
+
+    // Event: Filter Buttons
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // UI: Change active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Logic: Filter data
+            filterAndSearch();
+        });
+    });
+
+    // Initial render
+    renderServices(services);
+</script>
+
+</body>
+</html>

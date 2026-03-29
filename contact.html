@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact ZenGe Web Studio | Premium Web Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --primary-dark: #4f46e5;
+            --secondary: #0f172a; /* Slate 900 */
+            --accent: #10b981; /* Emerald */
+            --error: #ef4444;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Layout & Grid --- */
+        .contact-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 { font-size: 2.8rem; font-weight: 800; color: var(--secondary); letter-spacing: -1px; }
+        .subtext { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 10px auto; }
+
+        /* --- Left Side: Smart Form --- */
+        .form-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .urgency-note {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 12px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #9a3412;
+            font-weight: 600;
+        }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--secondary); }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .error-msg { color: var(--error); font-size: 0.8rem; margin-top: 4px; display: none; }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
+        
+        .loading-spinner {
+            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white; border-radius: 50%;
+            animation: spin 0.8s linear infinite; display: none;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- Right Side: Info & Actions --- */
+        .info-panel { display: flex; flex-direction: column; gap: 24px; }
+        
+        .info-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+
+        .info-card:hover { transform: translateX(5px); border-color: var(--primary); }
+        .info-title { font-weight: 700; color: var(--secondary); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+        .info-link { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+        
+        .response-tag {
+            font-size: 0.8rem; font-weight: 700; color: var(--accent);
+            display: flex; align-items: center; gap: 5px; margin-top: 8px;
+        }
+
+        .social-links { display: flex; gap: 15px; margin-top: 10px; }
+        .social-icon {
+            width: 45px; height: 45px; background: #f1f5f9;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.2rem; transition: var(--transition);
+        }
+        .social-icon:hover { background: var(--primary); color: white; transform: scale(1.1); }
+
+        /* --- Map Placeholder --- */
+        .map-box {
+            height: 200px; background: #e2e8f0; border-radius: var(--radius);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-weight: 600; border: 1px dashed var(--text-muted);
+        }
+
+        /* --- Floating Widgets --- */
+        .floating-actions { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
+        
+        .wa-btn {
+            background: #25d366; color: white; width: 60px; height: 60px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); text-decoration: none;
+            font-size: 2rem; transition: var(--transition); position: relative;
+        }
+
+        .wa-btn:hover { transform: scale(1.1) rotate(10deg); }
+        .tooltip {
+            position: absolute; right: 75px; background: var(--secondary); color: white;
+            padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; white-space: nowrap;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .wa-btn:hover .tooltip { opacity: 1; }
+
+        .chat-widget {
+            width: 300px; background: white; border-radius: 16px; box-shadow: var(--shadow-lg);
+            overflow: hidden; display: none; flex-direction: column; border: 1px solid #e2e8f0;
+        }
+        .chat-header { background: var(--primary); color: white; padding: 15px; font-weight: 700; }
+        .chat-body { height: 200px; padding: 15px; overflow-y: auto; font-size: 0.9rem; background: #f9fafb; }
+        .chat-msg { background: #e2e8f0; padding: 8px 12px; border-radius: 12px 12px 12px 0; margin-bottom: 10px; width: fit-content; }
+        .chat-footer { padding: 10px; display: flex; gap: 5px; border-top: 1px solid #eee; }
+        .chat-input { border: 1px solid #ddd; padding: 8px; border-radius: 8px; flex: 1; font-size: 0.85rem; }
+
+        /* --- Success UI --- */
+        #successOverlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); border-radius: var(--radius);
+            flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            z-index: 10; padding: 20px;
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 900px) {
+            .contact-container { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-container">
+        <header class="header-section">
+            <span class="badge">QUICK SUPPORT AVAILABLE</span>
+            <h1>Let's Build Something Great</h1>
+            <p class="subtext">Have a vision? We have the tools. Drop us a message and we'll respond within 24 hours.</p>
+        </header>
+
+        <div class="form-card" id="formCard">
+            <div class="urgency-note">
+                🔥 <strong>Notice:</strong> We only have 2 custom project slots remaining for March 2026.
+            </div>
+
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="e.g. John Doe">
+                    <div class="error-msg" id="nameError">Please enter your name</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com">
+                        <div class="error-msg" id="emailError">Invalid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+91 0000000000">
+                        <div class="error-msg" id="phoneError">Required</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="projectType">Project Type</label>
+                        <select id="projectType">
+                            <option value="">Select Service</option>
+                            <option value="business">Business Website</option>
+                            <option value="ecommerce">E-commerce Store</option>
+                            <option value="portfolio">Personal Portfolio</option>
+                            <option value="custom">Custom Web App</option>
+                        </select>
+                        <div class="error-msg" id="typeError">Please select one</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">Approx. Budget</label>
+                        <select id="budget">
+                            <option value="small">₹5,000 - ₹15,000</option>
+                            <option value="medium">₹15,000 - ₹50,000</option>
+                            <option value="large">₹50,000+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" rows="4" placeholder="Tell us about your project goals..."></textarea>
+                    <div class="error-msg" id="msgError">Tell us a little more</div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>Send Message</span>
+                    <div class="loading-spinner" id="spinner"></div>
+                </button>
+
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-muted);">
+                    🛡️ Your information is सुरक्षित and 100% private.
+                </p>
+            </form>
+
+            <div id="successOverlay">
+                <div style="font-size: 4rem;">✅</div>
+                <h2 style="color: var(--secondary); margin-bottom: 10px;">Message Received!</h2>
+                <p class="text-muted">Thank you for reaching out. Abir or a team member will contact you within 24 hours.</p>
+                <button class="badge" style="margin-top: 20px; cursor:pointer; border:none;" onclick="resetForm()">Send another message</button>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-card">
+                <div class="info-title">📞 Call for Quick Discussion</div>
+                <a href="tel:+919332710756" class="info-link">+91 93327 10756</a>
+                <div class="response-tag">● Live Now</div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-title">✉️ Official Email</div>
+                <a href="mailto:abirdeyasi96@gmail.com" class="info-link">abirdeyasi96@gmail.com</a>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Best for sharing detailed SRS or design docs.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-title">📍 Our Presence</div>
+                <p style="margin-bottom: 15px; font-weight: 500;">Serving Global Clients from West Bengal, India</p>
+                <div class="map-box">
+                    [ Interactive Map View ]
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-title">🌍 Follow ZenGe Studio</div>
+                <div class="social-links">
+                    <a href="#" class="social-icon" title="Instagram"></a>
+                    <a href="#" class="social-icon" title="Facebook"></a>
+                    <a href="#" class="social-icon" title="LinkedIn"></a>
+                </div>
+                <div class="response-tag" style="color: var(--text-muted);">Avg. response: 2 hours</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-actions">
+        <div class="chat-widget" id="chatWidget">
+            <div class="chat-header">ZenGe Live Support</div>
+            <div class="chat-body" id="chatBody">
+                <div class="chat-msg">Hi 👋 How can we help you today?</div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
+                <button onclick="sendChatMessage()" style="border:none; background:var(--primary); color:white; border-radius:8px; padding:5px 10px; cursor:pointer;">➤</button>
+            </div>
+        </div>
+
+        <a href="#" class="wa-btn" id="chatToggle" style="background: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;" title="Live Support">
+            💬
+        </a>
+
+        <a href="https://wa.me/919332710756?text=Hello,%20I%20am%20interested%20in%20your%20website%20services.%20Please%20guide%20me." target="_blank" class="wa-btn">
+            <span class="tooltip">Chat Instantly on WhatsApp</span>
+            WhatsApp
+        </a>
+    </div>
+
+    <script>
+        /* ============================================================
+           JAVASCRIPT LOGIC
+           ============================================================ */
+
+        const form = document.getElementById('contactForm');
+        const successOverlay = document.getElementById('successOverlay');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+
+        // 1. Form Validation Logic
+        function validate() {
+            let isValid = true;
+            const fields = [
+                { id: 'fullName', err: 'nameError' },
+                { id: 'email', err: 'emailError', type: 'email' },
+                { id: 'phone', err: 'phoneError' },
+                { id: 'projectType', err: 'typeError' },
+                { id: 'message', err: 'msgError' }
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                const error = document.getElementById(field.err);
+                
+                // Simple empty check
+                if (!element.value.trim()) {
+                    error.style.display = 'block';
+                    element.style.borderColor = 'var(--error)';
+                    isValid = false;
+                } else if (field.type === 'email' && !/\S+@\S+\.\S+/.test(element.value)) {
+                    // Regex email check
+                    error.style.display = 'block';
+                    element.style.borderColor = 'var(--error)';
+                    isValid = false;
+                } else {
+                    error.style.display = 'none';
+                    element.style.borderColor = '#e2e8f0';
+                }
+            });
+
+            return isValid;
+        }
+
+        // 2. Form Submission Handler
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (validate()) {
+                // UI: Start Loading State
+                submitBtn.disabled = true;
+                submitBtn.querySelector('span').innerText = 'Sending...';
+                spinner.style.display = 'block';
+
+                // Simulate Network Request
+                setTimeout(() => {
+                    successOverlay.style.display = 'flex';
+                    // Optional: In a real app, you'd use fetch() to send the data to a backend or EmailJS
+                    console.log("Form Submitted Successfully to: abirdeyasi96@gmail.com");
+                }, 1500);
+            }
+        });
+
+        // 3. Reset Form
+        function resetForm() {
+            form.reset();
+            successOverlay.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.querySelector('span').innerText = 'Send Message';
+            spinner.style.display = 'none';
+        }
+
+        // 4. Live Chat Simulation
+        const chatToggle = document.getElementById('chatToggle');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatBody = document.getElementById('chatBody');
+        const chatInput = document.getElementById('chatInput');
+
+        chatToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            chatWidget.style.display = chatWidget.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        function sendChatMessage() {
+            if (chatInput.value.trim()) {
+                // Add User Message
+                const userMsg = document.createElement('div');
+                userMsg.style.cssText = "background:var(--primary); color:white; padding:8px 12px; border-radius:12px 12px 0 12px; margin-bottom:10px; width:fit-content; align-self:flex-end; margin-left:auto;";
+                userMsg.innerText = chatInput.value;
+                chatBody.appendChild(userMsg);
+                
+                const val = chatInput.value;
+                chatInput.value = '';
+
+                // Automated Bot Reply
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'chat-msg';
+                    botMsg.innerText = "Thanks! I've notified Abir. Would you like to connect on WhatsApp for a faster reply?";
+                    chatBody.appendChild(botMsg);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        // Allow 'Enter' key to send chat
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+    </script>
+</body>
+</html>

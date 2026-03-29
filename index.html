@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenGe Web Studio | Premium Digital Experiences</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #0ea5e9;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --glass: rgba(255, 255, 255, 0.8);
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--white);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .loader {
+            width: 50px; height: 50px;
+            border: 5px solid var(--bg-light);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- SCROLL PROGRESS --- */
+        #progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            z-index: 1001; background: transparent;
+        }
+        #progress-bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        /* --- UTILITIES --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .btn {
+            display: inline-block; padding: 12px 32px; border-radius: 50px;
+            text-decoration: none; font-weight: 600; transition: var(--transition);
+            cursor: pointer; border: none; font-size: 1rem;
+        }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
+        .btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        
+        section { padding: 100px 0; opacity: 0; transform: translateY(30px); transition: 1s all ease-out; }
+        section.appear { opacity: 1; transform: translateY(0); }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 0;
+            z-index: 1000; transition: var(--transition);
+        }
+        nav.sticky {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 12px 0;
+            box-shadow: var(--shadow);
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at top right, #e0f2fe, transparent),
+                        radial-gradient(circle at bottom left, #eef2ff, transparent);
+            text-align: center;
+            padding-top: 80px;
+        }
+        .hero-content h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; margin-bottom: 20px; }
+        .hero-content .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-content p { font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px; }
+        .hero-btns { display: flex; gap: 20px; justify-content: center; }
+
+        /* --- ABOUT --- */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 30px; }
+        .skill-item { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: var(--shadow); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .skill-item i { color: var(--primary); }
+
+        /* --- SERVICES --- */
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .service-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: var(--primary);
+        }
+        .service-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; display: block; }
+        .service-card h3 { margin-bottom: 12px; }
+
+        /* --- PRICING --- */
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .price-card {
+            background: white; padding: 40px; border-radius: 24px; text-align: center;
+            border: 1px solid #eee; transition: var(--transition);
+        }
+        .price-card.popular { border: 2px solid var(--primary); transform: scale(1.05); }
+        .price-card h4 { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; color: var(--secondary); }
+        .price-card .amount { font-size: 3rem; font-weight: 800; margin: 20px 0; }
+        .price-card ul { list-style: none; margin-bottom: 30px; text-align: left; }
+        .price-card ul li { margin-bottom: 12px; color: var(--text-muted); }
+        .price-card ul li i { color: #10b981; margin-right: 10px; }
+
+        /* --- CONTACT --- */
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; background: white; padding: 50px; border-radius: 30px; box-shadow: var(--shadow); }
+        .contact-info h3 { margin-bottom: 20px; }
+        .info-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; text-decoration: none; color: var(--text-main); }
+        .info-item i { width: 45px; height: 45px; background: #eff6ff; color: var(--primary); display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; outline: none; transition: 0.3s;
+        }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+
+        /* --- FLOATING ELEMENTS --- */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; right: 30px;
+            background: #25d366; color: white; width: 60px; height: 60px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000; transition: var(--transition);
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); }
+
+        .back-to-top {
+            position: fixed; bottom: 100px; right: 35px;
+            background: var(--white); color: var(--primary);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            box-shadow: var(--shadow); cursor: pointer; z-index: 999;
+        }
+
+        /* --- LIVE CHAT SIMULATION --- */
+        .chat-widget {
+            position: fixed; bottom: 30px; left: 30px; width: 300px;
+            background: white; border-radius: 15px; box-shadow: var(--shadow);
+            z-index: 1000; overflow: hidden; display: none;
+        }
+        .chat-header { background: var(--primary); color: white; padding: 15px; font-weight: 600; display: flex; justify-content: space-between; }
+        .chat-body { height: 250px; padding: 15px; overflow-y: auto; font-size: 0.9rem; }
+        .chat-msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 10px; max-width: 80%; }
+        .msg-bot { background: #f1f5f9; align-self: flex-start; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .about-grid, .contact-wrapper { grid-template-columns: 1fr; }
+            .hero-btns { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">ZenGe Studio<span>.</span></a>
+            <ul class="nav-links">
+                
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <br>
+                <h1>ABIR DEYASI</h1>
+            </ul>
+            <a href="#contact" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Get Started</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero appear">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Crafting <span class="gradient-text" id="typing-text"></span><br>For Modern Brands</h1>
+                <p>We combine high-end UI/UX design with conversion-driven strategy to build websites that don't just look pretty—they work.</p>
+                <div class="hero-btns">
+                    <a href="#contact" class="btn btn-primary">Book a Website <i class="fas fa-calendar-check" style="margin-left: 8px;"></i></a>
+                    <a href="#portfolio" class="btn btn-outline">View Demo Projects</a>
+                </div>
+                <div style="margin-top: 40px; color: var(--secondary); font-size: 0.9rem;">
+                    <i class="fas fa-check-circle"></i> 100% Custom Design &nbsp;&nbsp; <i class="fas fa-check-circle"></i> SEO Optimized &nbsp;&nbsp; <i class="fas fa-check-circle"></i> Fast Loading
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <div class="about-grid">
+            <div>
+                <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">About the Studio</span>
+                <h2 style="font-size: 2.5rem; margin: 15px 0;">We turn complex problems into elegant digital solutions.</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">
+                    Hi, I'm the lead strategist at ZenGe. We don't just write code; we build business tools. Every pixel is placed with intent, and every line of code is written for performance.
+                </p>
+                <div class="skills-grid">
+                    <div class="skill-item"><i class="fas fa-code"></i> Frontend Dev</div>
+                    <div class="skill-item"><i class="fas fa-paint-brush"></i> UI/UX Design</div>
+                    <div class="skill-item"><i class="fas fa-rocket"></i> SEO Mastery</div>
+                    <div class="skill-item"><i class="fas fa-chart-line"></i> Conversion Rate</div>
+                </div>
+            </div>
+            <div style="background: white; padding: 40px; border-radius: 30px; box-shadow: var(--shadow);">
+                <h3>Why Work With Us?</h3>
+                <ul style="list-style: none; margin-top: 20px;">
+                    <li style="margin-bottom: 20px; display: flex; gap: 15px;">
+                        <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        <span><strong>Business-First Mindset:</strong> We focus on ROI, not just aesthetic trends.</span>
+                    </li>
+                    <li style="margin-bottom: 20px; display: flex; gap: 15px;">
+                        <i class="fas fa-bolt" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        <span><strong>Lightning Speed:</strong> Optimized for Core Web Vitals and 90+ PageSpeed scores.</span>
+                    </li>
+                    <li style="display: flex; gap: 15px;">
+                        <i class="fas fa-headset" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        <span><strong>Direct Access:</strong> Work directly with the lead engineer—no middleman.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" style="background: #f1f5f9;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Specialized Solutions</h2>
+                <p>Tailored web experiences for every industry</p>
+            </div>
+            <div class="services-grid" id="services-container">
+                </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="container">
+        <div class="section-header">
+            <h2>Featured Work</h2>
+            <p>A glimpse into our premium project standard</p>
+        </div>
+        <div style="background: white; border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div style="padding: 50px;">
+                <span class="btn-primary" style="padding: 5px 15px; font-size: 0.7rem; border-radius: 5px;">E-COMMERCE</span>
+                <h3 style="font-size: 2rem; margin: 20px 0;">Luxe Interior Dashboard</h3>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">A custom-built analytics dashboard for a luxury furniture brand, focusing on seamless user flow and data visualization.</p>
+                <a href="#" class="btn btn-outline" onclick="alert('Demo is loading...')">Live Preview <i class="fas fa-external-link-alt"></i></a>
+            </div>
+            <div style="background: #e2e8f0; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                <i class="fas fa-laptop-code" style="font-size: 10rem; color: #cbd5e1;"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="container">
+        <div class="section-header">
+            <h2>Investment Plans</h2>
+            <p>Transparent pricing with no hidden surprises</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h4>Starter</h4>
+                <div class="amount">₹1999</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> One Page Design</li>
+                    <li><i class="fas fa-check"></i> Fully Responsive</li>
+                    <li><i class="fas fa-check"></i> Contact Form</li>
+                    <li style="opacity: 0.5;"><i class="fas fa-times"></i> SEO Optimization</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%;">Select Plan</a>
+            </div>
+            <div class="price-card popular">
+                <span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">MOST POPULAR</span>
+                <h4>Standard</h4>
+                <div class="amount">₹3999</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Up to 5 Pages</li>
+                    <li><i class="fas fa-check"></i> SEO Ready</li>
+                    <li><i class="fas fa-check"></i> Custom Animations</li>
+                    <li><i class="fas fa-check"></i> WhatsApp Integration</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">Select Plan</a>
+            </div>
+            <div class="price-card">
+                <h4>Premium</h4>
+                <div class="amount">₹6999</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Unlimited Pages</li>
+                    <li><i class="fas fa-check"></i> E-commerce Ready</li>
+                    <li><i class="fas fa-check"></i> Premium Hosting (1yr)</li>
+                    <li><i class="fas fa-check"></i> Advanced CMS</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%;">Select Plan</a>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: var(--text-main); color: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2 style="color: white;">Our Proven Process</h2>
+                <p style="color: #94a3b8;">How we ensure your project succeeds</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center;">
+                <div>
+                    <h1 style="color: var(--primary); margin-bottom: 10px;">01</h1>
+                    <h4>Discovery</h4>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">Understanding your goals and target audience.</p>
+                </div>
+                <div>
+                    <h1 style="color: var(--primary); margin-bottom: 10px;">02</h1>
+                    <h4>Blueprint</h4>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">Wireframing and UI design for approval.</p>
+                </div>
+                <div>
+                    <h1 style="color: var(--primary); margin-bottom: 10px;">03</h1>
+                    <h4>Development</h4>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">Clean coding with the latest standards.</p>
+                </div>
+                <div>
+                    <h1 style="color: var(--primary); margin-bottom: 10px;">04</h1>
+                    <h4>Launch</h4>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">Testing, optimization, and going live.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="container">
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <h3>Let's build something great.</h3>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">Ready to start your digital transformation? Get in touch today.</p>
+                
+                <a href="mailto:abirdeyasi96@gmail.com" class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>abirdeyasi96@gmail.com</span>
+                </a>
+                <a href="tel:+919332710756" class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+91 93327 10756</span>
+                </a>
+                <div style="margin-top: 30px; display: flex; gap: 15px;">
+                    <a href="#" class="btn-outline" style="padding: 10px; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn-outline" style="padding: 10px; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form id="mainContactForm">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                    <textarea id="message" rows="5" placeholder="Tell us about your project" required></textarea>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message <i class="fas fa-paper-plane" style="margin-left: 10px;"></i></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 50px 0; border-top: 1px solid #eee; text-align: center;">
+        <p>&copy; 2026 ZenGe Web Studio. Handcrafted for excellence.</p>
+    </footer>
+
+    <a href="https://wa.me/919332710756?text=Hi%20ZenGe%20Studio,%20I'd%20like%20to%20discuss%20a%20website%20project." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <span>ZenGe Assistant</span>
+            <i class="fas fa-times" style="cursor: pointer;" onclick="toggleChat()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg msg-bot">Hi there! 👋 How can we help you grow your business today?</div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Loading Animation
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+            startTyping();
+            initScrollReveal();
+            setTimeout(toggleChat, 3000); // Show chat after 3 seconds
+        });
+
+        // 2. Typing Effect
+        const typingText = document.getElementById('typing-text');
+        const phrases = ["Premium Websites", "Digital Success", "Custom Solutions", "Brand Growth"];
+        let phraseIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+
+        function startTyping() {
+            const current = phrases[phraseIdx];
+            if (isDeleting) {
+                typingText.textContent = current.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                typingText.textContent = current.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let speed = isDeleting ? 50 : 150;
+            if (!isDeleting && charIdx === current.length) {
+                speed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                phraseIdx = (phraseIdx + 1) % phrases.length;
+                speed = 500;
+            }
+            setTimeout(startTyping, speed);
+        }
+
+        // 3. Scroll Progress & Sticky Nav
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            const nav = document.getElementById('navbar');
+            const btt = document.getElementById('backToTop');
+            if (winScroll > 50) {
+                nav.classList.add('sticky');
+                btt.style.display = 'flex';
+            } else {
+                nav.classList.remove('sticky');
+                btt.style.display = 'none';
+            }
+        };
+
+        // 4. Back to Top
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 5. Dynamic Services Injection
+        const services = [
+            { title: "Business Website", icon: "fa-briefcase" },
+            { title: "Portfolio Website", icon: "fa-user-tie" },
+            { title: "E-commerce Website", icon: "fa-shopping-cart" },
+            { title: "Landing Page", icon: "fa-rocket" },
+            { title: "Blog Website", icon: "fa-pen-nib" },
+            { title: "Restaurant Website", icon: "fa-utensils" },
+            { title: "Edu/College Website", icon: "fa-graduation-cap" },
+            { title: "Personal Brand", icon: "fa-star" },
+            { title: "Startup Website", icon: "fa-lightbulb" },
+            { title: "Website Redesign", icon: "fa-sync-alt" },
+            { title: "Custom Web Apps", icon: "fa-laptop-code" }
+        ];
+
+        const servicesContainer = document.getElementById('services-container');
+        services.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.innerHTML = `
+                <i class="fas ${s.icon}"></i>
+                <h3>${s.title}</h3>
+                <p style="font-size: 0.9rem; color: var(--secondary);">High-performance, tailored solution designed to scale your brand effectively.</p>
+            `;
+            servicesContainer.appendChild(card);
+        });
+
+        // 6. Intersection Observer for Scroll Animations
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('appear');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // 7. Form Validation & Logic
+        document.getElementById('mainContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            if (name.length < 2) {
+                alert("Please enter a valid name.");
+                return;
+            }
+            
+            // Simulation of successful send
+            const btn = this.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert(`Thank you, ${name}! Your request has been sent to ZenGe Studio. We will contact you shortly.`);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                this.reset();
+            }, 1500);
+        });
+
+        // 8. Chat Logic
+        function toggleChat() {
+            const chat = document.getElementById('chatWidget');
+            chat.style.display = (chat.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+
+    <!-- ===== REVIEW POPUP START ===== -->
+<style>
+#popup {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.box {
+  background:#fff;
+  padding:20px;
+  width:320px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.stars span {
+  font-size:25px;
+  cursor:pointer;
+}
+
+textarea {
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+}
+
+button {
+  margin-top:10px;
+  padding:8px 15px;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+.submit-btn {
+  background:#007bff;
+  color:#fff;
+}
+
+.cancel-btn {
+  background:#ccc;
+  margin-left:5px;
+}
+</style>
+
+<div id="popup">
+  <div class="box">
+    <h3>⭐ Give Your Review</h3>
+    
+    <div class="stars" id="stars">
+      <span onclick="setRating(1)">☆</span>
+      <span onclick="setRating(2)">☆</span>
+      <span onclick="setRating(3)">☆</span>
+      <span onclick="setRating(4)">☆</span>
+      <span onclick="setRating(5)">☆</span>
+    </div>
+
+    <textarea id="reviewText" placeholder="Write your review..."></textarea>
+
+    <br>
+    <button class="submit-btn" onclick="submitReview()">Submit</button>
+    <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+  </div>
+</div>
+
+<!-- Display Reviews -->
+<div id="reviews" style="padding:20px;"></div>
+
+<script>
+let rating = 0;
+
+// Star select
+function setRating(r){
+  rating = r;
+  let stars = document.querySelectorAll("#stars span");
+
+  for(let i=0;i<stars.length;i++){
+    if(i < r){
+      stars[i].innerHTML = "⭐";
+    } else {
+      stars[i].innerHTML = "☆";
+    }
+  }
+}
+
+// Submit review
+function submitReview(){
+  let text = document.getElementById("reviewText").value;
+
+  if(rating == 0 || text == ""){
+    alert("Please give rating and write review");
+    return;
+  }
+
+  let reviewData = {
+    rating: rating,
+    text: text
+  };
+
+  let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+  reviews.push(reviewData);
+  localStorage.setItem("reviews", JSON.stringify(reviews));
+
+  closePopup();
+  loadReviews();
+}
+
+// Cancel / Close popup
+function closePopup(){
+  document.getElementById("popup").style.display="none";
+}
+
+// Load reviews
+function loadReviews(){
+  let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+  let output = "";
+
+  for(let i=0;i<reviews.length;i++){
+    let stars = "⭐".repeat(reviews[i].rating);
+
+    output += `
+      <div style="background:#fff; padding:10px; margin:10px; border-radius:8px;">
+        <div>${stars}</div>
+        <p>${reviews[i].text}</p>
+      </div>
+    `;
+  }
+
+  document.getElementById("reviews").innerHTML = output;
+}
+
+// Load on start
+window.onload = loadReviews;
+</script>
+<!-- ===== REVIEW POPUP END ===== -->
+</body>
+</html>

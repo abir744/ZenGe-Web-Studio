@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans | ZenGe Web Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0f172a;
+            --accent: #10b981;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 50px -12px rgba(99, 102, 241, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Utils */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .text-center { text-align: center; }
+        .section-padding { padding: 80px 0; }
+
+        /* Header Area */
+        .pricing-header { padding: 100px 0 40px; }
+        .badge-top { 
+            background: rgba(99, 102, 241, 0.1); 
+            color: var(--primary); 
+            padding: 6px 16px; 
+            border-radius: 100px; 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        h1 { font-size: 3rem; font-weight: 800; color: var(--secondary); margin-bottom: 1rem; letter-spacing: -1px; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; }
+
+        /* Pricing Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 32px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #e2e8f0; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(28px); }
+        .toggle-label { font-weight: 600; font-size: 0.95rem; color: var(--text-muted); }
+        .toggle-label.active { color: var(--secondary); }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+        .pricing-card.featured:hover { transform: scale(1.05) translateY(-10px); }
+
+        .card-badge {
+            position: absolute;
+            top: 20px; right: 20px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-popular { background: var(--primary); color: white; }
+        .badge-value { background: var(--accent); color: white; }
+
+        .plan-name { font-weight: 700; font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .price-wrapper { margin-bottom: 2rem; }
+        .currency { font-size: 1.5rem; font-weight: 700; vertical-align: top; margin-right: 2px; }
+        .price { font-size: 3.5rem; font-weight: 800; color: var(--secondary); letter-spacing: -2px; }
+        .period { color: var(--text-muted); font-size: 1rem; }
+
+        .feature-list { list-style: none; margin-bottom: 2rem; flex-grow: 1; }
+        .feature-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 12px; 
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        .check-icon { color: var(--accent); font-weight: bold; }
+
+        .delivery-info {
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .cta-btn {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+        .btn-outline { border: 2px solid #e2e8f0; color: var(--secondary); }
+        .btn-outline:hover { background: #f1f5f9; border-color: var(--secondary); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 14px 0 rgba(99,102,241,0.39); }
+        .btn-primary:hover { background: var(--primary-dark); transform: scale(1.02); }
+
+        /* Comparison Table */
+        .comparison-section { margin-top: 60px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); }
+        th, td { padding: 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+        th { background: #f8fafc; color: var(--secondary); font-weight: 700; }
+        .check { color: var(--accent); }
+        .cross { color: #cbd5e1; }
+
+        /* FAQ Section */
+        .faq-section { max-width: 800px; margin: 80px auto; }
+        .faq-item { background: white; margin-bottom: 15px; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .faq-question { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 700; align-items: center; }
+        .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.3s ease; color: var(--text-muted); }
+        .faq-item.active .faq-answer { padding: 0 20px 20px; max-height: 200px; }
+        .faq-icon { transition: 0.3s; }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+
+        /* Trust Section */
+        .trust-bar { display: flex; justify-content: center; gap: 40px; margin: 40px 0; flex-wrap: wrap; }
+        .trust-item { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+
+        .urgency { color: var(--accent); font-weight: 700; font-size: 0.9rem; margin-top: 10px; }
+
+        /* Floating Actions */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; background: var(--secondary); color: white;
+            width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; opacity: 0; transition: 0.3s; z-index: 10;
+        }
+        .back-to-top.visible { opacity: 1; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container section-padding">
+    <header class="pricing-header text-center">
+        <span class="badge-top">PRICING PLANS 2024</span>
+        <h1>Scale Your Vision with ZenGe</h1>
+        <p class="subtitle">Transparent pricing for premium digital experiences. No hidden fees, just pure results.</p>
+        
+        <div class="urgency">⚡ Limited slots available: Only 3 spots left for this month!</div>
+
+        <div class="toggle-container">
+            <span class="toggle-label active" id="label-one-time">One-time Payment</span>
+            <label class="switch">
+                <input type="checkbox" id="priceToggle">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label" id="label-monthly">Monthly Value Est.</span>
+        </div>
+    </header>
+
+    <div class="pricing-grid" id="pricingGrid">
+        </div>
+
+    <div class="text-center">
+        <button class="btn-outline" style="padding: 10px 25px; cursor:pointer;" onclick="scrollToSection('comparison')">Compare Detailed Features</button>
+    </div>
+
+    <div class="trust-bar">
+        <div class="trust-item">🛡️ 100% Satisfaction Guarantee</div>
+        <div class="trust-item">🚀 Ultra-Fast Performance</div>
+        <div class="trust-item">💬 24/7 Dedicated Support</div>
+        <div class="trust-item">🎨 Bespoke UI/UX Design</div>
+    </div>
+
+    <section id="comparison" class="comparison-section">
+        <h2 class="text-center" style="margin-bottom: 40px;">Compare Plans</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Features</th>
+                    <th>Starter</th>
+                    <th>Standard</th>
+                    <th>Premium</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Responsive Design</td><td class="check">✔</td><td class="check">✔</td><td class="check">✔</td></tr>
+                <tr><td>SEO Setup</td><td class="check">✔ (Basic)</td><td class="check">✔ (Advanced)</td><td class="check">✔ (Full)</td></tr>
+                <tr><td>WhatsApp Integration</td><td class="cross">✖</td><td class="check">✔</td><td class="check">✔</td></tr>
+                <tr><td>Custom Animations</td><td class="cross">✖</td><td class="cross">✖</td><td class="check">✔</td></tr>
+                <tr><td>Priority Support</td><td class="cross">✖</td><td class="cross">✖</td><td class="check">✔</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="faq-section">
+        <h2 class="text-center" style="margin-bottom: 40px;">Frequently Asked Questions</h2>
+        <div id="faqContainer">
+            </div>
+    </section>
+
+    <footer class="text-center" style="padding-top: 40px; border-top: 1px solid #e2e8f0;">
+        <h3>Need a Custom Quote?</h3>
+        <p class="text-muted" style="margin-bottom: 20px;">For Enterprise or E-commerce solutions, let's talk directly.</p>
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://wa.me/9332710756?text=Hi%20ZenGe%20Studio,%20I'm%20interested%20in%20a%20custom%20web%20project." class="btn-primary cta-btn" style="padding: 12px 30px;">Chat on WhatsApp</a>
+            <a href="mailto:abirdeyasi96@gmail.com" class="btn-outline cta-btn" style="padding: 12px 30px;">Email Us</a>
+        </div>
+    </footer>
+</div>
+
+<a href="#" class="back-to-top" id="backToTop">↑</a>
+
+<script>
+    /* ========================================
+       1. DATA STRUCTURES
+       ========================================
+    */
+    const pricingData = [
+        {
+            name: "Starter",
+            oneTime: 1999,
+            monthly: 499,
+            delivery: "2–3 Days",
+            features: ["1–3 Pages Website", "Mobile Responsive", "Basic UI Design", "Basic SEO Setup"],
+            recommended: false,
+            badge: null,
+            cta: "Get Started"
+        },
+        {
+            name: "Standard",
+            oneTime: 3999,
+            monthly: 999,
+            delivery: "3–5 Days",
+            features: ["4–6 Pages Website", "Premium UI Design", "WhatsApp Integration", "Speed Optimization", "SEO Optimization"],
+            recommended: true,
+            badge: "Most Popular",
+            cta: "Book Now"
+        },
+        {
+            name: "Premium",
+            oneTime: 6999,
+            monthly: 1499,
+            delivery: "5–7 Days",
+            features: ["7–10 Pages Website", "Advanced UI/UX", "Interactive Elements", "Full Optimization", "Priority Support"],
+            recommended: false,
+            badge: "Best Value",
+            cta: "Book Now"
+        },
+        {
+            name: "Custom",
+            oneTime: "Quote",
+            monthly: "Custom",
+            delivery: "Flexible",
+            features: ["Custom Web Apps", "E-commerce Systems", "API Integration", "Unlimited Pages", "Full Maintenance"],
+            recommended: false,
+            badge: null,
+            cta: "Contact Us"
+        }
+    ];
+
+    const faqs = [
+        { q: "What is the typical delivery time?", a: "Depending on your plan, delivery ranges from 2 days for Starter to 7 days for Premium. Custom projects vary by complexity." },
+        { q: "Do you offer post-launch support?", a: "Absolutely! Every plan includes 30 days of free support. Premium and Custom plans offer extended priority maintenance." },
+        { q: "What are the payment methods?", a: "We accept UPI (GPay, PhonePe), Bank Transfers, and major Credit/Debit cards via secure gateways." },
+        { q: "Can I upgrade my plan later?", a: "Yes, you can upgrade your website at any time. We build with scalability in mind." },
+        { q: "Are there any hidden charges?", a: "No hidden charges. The price you see is the price you pay. Domain/Hosting are billed at actual costs if not provided." }
+    ];
+
+    /* ========================================
+       2. RENDERING LOGIC
+       ========================================
+    */
+    const pricingGrid = document.getElementById('pricingGrid');
+    const priceToggle = document.getElementById('priceToggle');
+
+    function renderCards(isMonthly = false) {
+        pricingGrid.innerHTML = ''; // Clear current
+        
+        pricingData.forEach((plan, index) => {
+            const price = isMonthly ? plan.monthly : plan.oneTime;
+            const period = isMonthly ? "/mo" : "";
+            const isFeatured = plan.recommended ? 'featured' : '';
+            const badgeHTML = plan.badge ? `<span class="card-badge ${plan.badge === 'Most Popular' ? 'badge-popular' : 'badge-value'}">${plan.badge}</span>` : '';
+            
+            // Generate Feature List
+            const featuresHTML = plan.features.map(f => `<li class="feature-item"><span class="check-icon">✓</span> ${f}</li>`).join('');
+
+            const card = `
+                <div class="pricing-card ${isFeatured}" style="animation-delay: ${index * 0.15}s">
+                    ${badgeHTML}
+                    <div class="plan-name">${plan.name}</div>
+                    <div class="price-wrapper">
+                        <span class="currency">${typeof price === 'number' ? '₹' : ''}</span>
+                        <span class="price">${price}</span>
+                        <span class="period">${typeof price === 'number' ? period : ''}</span>
+                    </div>
+                    <div class="delivery-info">⏱ Delivery: ${plan.delivery}</div>
+                    <ul class="feature-list">
+                        ${featuresHTML}
+                    </ul>
+                    <a href="https://wa.me/9332710756" class="cta-btn ${plan.recommended ? 'btn-primary' : 'btn-outline'}">
+                        ${plan.cta}
+                    </a>
+                </div>
+            `;
+            pricingGrid.innerHTML += card;
+        });
+    }
+
+    function renderFAQs() {
+        const faqContainer = document.getElementById('faqContainer');
+        faqs.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'faq-item';
+            div.innerHTML = `
+                <div class="faq-question">
+                    ${item.q}
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">${item.a}</div>
+            `;
+            div.onclick = () => {
+                div.classList.toggle('active');
+            };
+            faqContainer.appendChild(div);
+        });
+    }
+
+    /* ========================================
+       3. INTERACTION LOGIC
+       ========================================
+    */
+    priceToggle.addEventListener('change', (e) => {
+        const isMonthly = e.target.checked;
+        document.getElementById('label-one-time').classList.toggle('active', !isMonthly);
+        document.getElementById('label-monthly').classList.toggle('active', isMonthly);
+        renderCards(isMonthly);
+    });
+
+    window.onscroll = function() {
+        const btt = document.getElementById('backToTop');
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            btt.classList.add('visible');
+        } else {
+            btt.classList.remove('visible');
+        }
+    };
+
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize
+    renderCards();
+    renderFAQs();
+</script>
+
+</body>
+</html>
